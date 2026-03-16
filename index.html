@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hone — Account</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --accent: #00D4AA;
+      --accent-secondary: #00B4D8;
+      --accent-dim: #0077B6;
+      --bg-primary: #0D1117;
+      --bg-secondary: #161B22;
+      --bg-card: #1C2128;
+      --text-primary: #E6EDF3;
+      --text-secondary: #8B949E;
+      --border: rgba(255, 255, 255, 0.06);
+      --border-focus: rgba(0, 212, 170, 0.5);
+      --radius: 12px;
+      --radius-sm: 8px;
+      --transition: 0.2s ease;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Layout ── */
+    #app {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 0 20px 60px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 32px;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .logo:hover { opacity: 0.85; }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .card h2 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .card h3 {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+
+    /* ── Buttons ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all var(--transition);
+      border: none;
+      text-decoration: none;
+      line-height: 1;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+      color: #0D1117;
+    }
+    .btn-primary:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(0, 212, 170, 0.25);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text-primary);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    .btn-secondary:hover {
+      border-color: rgba(255, 255, 255, 0.25);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .btn-danger {
+      background: transparent;
+      color: #F85149;
+      border: 1px solid rgba(248, 81, 73, 0.3);
+    }
+    .btn-danger:hover {
+      background: rgba(248, 81, 73, 0.1);
+      border-color: rgba(248, 81, 73, 0.5);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-secondary);
+      padding: 8px 12px;
+      font-size: 13px;
+    }
+    .btn-ghost:hover { color: var(--text-primary); }
+
+    .btn-sm {
+      padding: 6px 14px;
+      font-size: 13px;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    /* ── Inputs ── */
+    .input-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .input-group:last-child { margin-bottom: 0; }
+
+    input[type="email"],
+    input[type="text"] {
+      flex: 1;
+      padding: 10px 14px;
+      background: var(--bg-secondary);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 14px;
+      outline: none;
+      transition: border-color var(--transition);
+    }
+
+    input::placeholder { color: var(--text-secondary); }
+
+    input:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.1);
+    }
+
+    /* ── Badges ── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+
+    .badge-free {
+      background: rgba(139, 148, 158, 0.15);
+      color: var(--text-secondary);
+    }
+
+    .badge-pro {
+      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+      color: #0D1117;
+    }
+
+    /* ── Lists ── */
+    .list-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .list-item:last-child { border-bottom: none; }
+
+    .list-item-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .list-item-meta {
+      font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-secondary);
+    }
+
+    .list-empty {
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 14px;
+      padding: 20px 0;
+    }
+
+    /* ── Usage bars ── */
+    .usage-row {
+      margin-bottom: 16px;
+    }
+    .usage-row:last-child { margin-bottom: 0; }
+
+    .usage-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+
+    .usage-label span:first-child { color: var(--text-secondary); }
+
+    .usage-label span:last-child {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-primary);
+      font-size: 12px;
+    }
+
+    .usage-bar {
+      height: 6px;
+      background: var(--bg-secondary);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .usage-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
+      transition: width 0.4s ease;
+    }
+
+    .usage-bar-fill.warn {
+      background: linear-gradient(90deg, #F0883E, #F85149);
+    }
+
+    /* ── Login page ── */
+    .login-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 70vh;
+      text-align: center;
+    }
+
+    .login-container .logo {
+      font-size: 36px;
+      margin-bottom: 8px;
+    }
+
+    .login-subtitle {
+      color: var(--text-secondary);
+      font-size: 15px;
+      margin-bottom: 40px;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 380px;
+    }
+
+    /* ── Pricing card ── */
+    .pricing-card {
+      background: var(--bg-card);
+      border: 1px solid rgba(0, 212, 170, 0.2);
+      border-radius: var(--radius);
+      padding: 32px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .pricing-card .price {
+      font-size: 48px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.1;
+    }
+
+    .pricing-card .price-period {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+
+    .features-list {
+      list-style: none;
+      text-align: left;
+      margin-bottom: 28px;
+    }
+
+    .features-list li {
+      padding: 8px 0;
+      font-size: 14px;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .features-list li::before {
+      content: '\2713';
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    /* ── Alerts ── */
+    .alert {
+      padding: 14px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+
+    .alert-success {
+      background: rgba(0, 212, 170, 0.1);
+      color: var(--accent);
+      border: 1px solid rgba(0, 212, 170, 0.2);
+    }
+
+    .alert-error {
+      background: rgba(248, 81, 73, 0.1);
+      color: #F85149;
+      border: 1px solid rgba(248, 81, 73, 0.2);
+    }
+
+    .alert-info {
+      background: rgba(0, 180, 216, 0.1);
+      color: var(--accent-secondary);
+      border: 1px solid rgba(0, 180, 216, 0.2);
+    }
+
+    /* ── Confirm dialog ── */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      backdrop-filter: blur(4px);
+    }
+
+    .dialog {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      max-width: 400px;
+      width: 90%;
+    }
+
+    .dialog h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--text-primary);
+    }
+
+    .dialog p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+
+    .dialog-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    /* ── Spinner ── */
+    .spinner {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loading-center {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 0;
+    }
+
+    /* ── Misc ── */
+    .section-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+
+    .cta-banner {
+      background: linear-gradient(135deg, rgba(0, 212, 170, 0.08), rgba(0, 180, 216, 0.08));
+      border: 1px solid rgba(0, 212, 170, 0.15);
+      border-radius: var(--radius);
+      padding: 24px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .cta-banner p {
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+
+    .platform-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background: var(--bg-secondary);
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .device-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 13px;
+      margin-bottom: 24px;
+      cursor: pointer;
+      transition: color var(--transition);
+    }
+    .back-link:hover { color: var(--text-primary); }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+
+  <script>
+    // ── Config ──
+    const API_BASE = document.body.getAttribute('data-api') || 'https://auth.hone.codes';
+    const TOKEN_KEY = 'hone_token';
+    const app = document.getElementById('app');
+
+    // ── Auth helpers ──
+    function getToken() {
+      return localStorage.getItem(TOKEN_KEY);
+    }
+
+    function setToken(token) {
+      localStorage.setItem(TOKEN_KEY, token);
+    }
+
+    function clearToken() {
+      localStorage.removeItem(TOKEN_KEY);
+    }
+
+    function requireAuth() {
+      if (!getToken()) {
+        navigate('/login');
+        return false;
+      }
+      return true;
+    }
+
+    // ── API ──
+    async function apiCall(endpoint) {
+      const token = getToken();
+      const sep = endpoint.includes('?') ? '&' : '?';
+      const url = API_BASE + endpoint + (token ? sep + 'token=' + encodeURIComponent(token) : '');
+      const res = await fetch(url);
+      if (!res.ok) {
+        const text = await res.text();
+        let msg;
+        try { msg = JSON.parse(text).error || text; } catch { msg = text; }
+        throw new Error(msg || 'Request failed (' + res.status + ')');
+      }
+      return res.json();
+    }
+
+    // ── Routing ──
+    function navigate(hash) {
+      location.hash = '#' + hash;
+    }
+
+    function getRoute() {
+      const raw = location.hash.slice(1) || '/';
+      const qIdx = raw.indexOf('?');
+      const path = qIdx >= 0 ? raw.slice(0, qIdx) : raw;
+      const query = {};
+      if (qIdx >= 0) {
+        raw.slice(qIdx + 1).split('&').forEach(function(pair) {
+          const eq = pair.indexOf('=');
+          if (eq >= 0) {
+            query[decodeURIComponent(pair.slice(0, eq))] = decodeURIComponent(pair.slice(eq + 1));
+          }
+        });
+      }
+      return { path: path, query: query };
+    }
+
+    function render() {
+      const route = getRoute();
+      switch (route.path) {
+        case '/login':
+          renderLogin();
+          break;
+        case '/verify':
+          renderVerify(route.query);
+          break;
+        case '/upgrade':
+          if (requireAuth()) renderUpgrade();
+          break;
+        case '/settings':
+          if (requireAuth()) renderSettings();
+          break;
+        case '/':
+        default:
+          if (requireAuth()) renderDashboard();
+          break;
+      }
+    }
+
+    // ── Render: Login ──
+    function renderLogin() {
+      app.innerHTML = '' +
+        '<div class="login-container">' +
+          '<div class="logo">Hone</div>' +
+          '<p class="login-subtitle">Sign in to your account</p>' +
+          '<div class="card login-card">' +
+            '<div id="login-alert"></div>' +
+            '<div class="input-group">' +
+              '<input type="email" id="login-email" placeholder="you@example.com" autocomplete="email">' +
+            '</div>' +
+            '<button class="btn btn-primary" style="width:100%" id="login-btn">Send magic link</button>' +
+          '</div>' +
+        '</div>';
+
+      var emailInput = document.getElementById('login-email');
+      var btn = document.getElementById('login-btn');
+
+      emailInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') btn.click();
+      });
+
+      btn.addEventListener('click', async function() {
+        var email = emailInput.value.trim();
+        if (!email) {
+          showAlert('login-alert', 'Please enter your email address.', 'error');
+          return;
+        }
+        btn.disabled = true;
+        btn.textContent = 'Sending\u2026';
+        try {
+          var callbackUrl = location.origin + location.pathname + '#/verify';
+          await apiCall('/auth/login?email=' + encodeURIComponent(email) + '&callbackUrl=' + encodeURIComponent(callbackUrl));
+          showAlert('login-alert', 'Magic link sent! Check your inbox.', 'success');
+          btn.textContent = 'Link sent';
+        } catch (err) {
+          showAlert('login-alert', err.message, 'error');
+          btn.disabled = false;
+          btn.textContent = 'Send magic link';
+        }
+      });
+
+      emailInput.focus();
+    }
+
+    // ── Render: Verify ──
+    async function renderVerify(query) {
+      app.innerHTML = '' +
+        '<div class="login-container">' +
+          '<div class="logo">Hone</div>' +
+          '<p class="login-subtitle">Verifying your login\u2026</p>' +
+          '<div class="loading-center"><div class="spinner"></div></div>' +
+          '<div id="verify-alert"></div>' +
+        '</div>';
+
+      var token = query.token;
+      if (!token) {
+        showAlert('verify-alert', 'No verification token found.', 'error');
+        return;
+      }
+
+      try {
+        var data = await apiCall('/auth/verify?token=' + encodeURIComponent(token) + '&deviceName=Dashboard&platform=web');
+        if (data.deviceToken) {
+          setToken(data.deviceToken);
+        } else if (data.token) {
+          setToken(data.token);
+        }
+        navigate('/');
+      } catch (err) {
+        document.querySelector('.login-subtitle').textContent = 'Verification failed';
+        document.querySelector('.loading-center').remove();
+        showAlert('verify-alert', err.message, 'error');
+      }
+    }
+
+    // ── Render: Dashboard ──
+    async function renderDashboard() {
+      app.innerHTML = '' +
+        renderHeader() +
+        '<div class="loading-center"><div class="spinner"></div></div>';
+
+      var subscription = null;
+      var projects = [];
+      var devices = [];
+      var errors = [];
+
+      // Fetch all data in parallel
+      var results = await Promise.allSettled([
+        apiCall('/auth/subscription'),
+        apiCall('/projects'),
+        apiCall('/devices')
+      ]);
+
+      if (results[0].status === 'fulfilled') subscription = results[0].value;
+      else errors.push('Subscription: ' + results[0].reason.message);
+
+      if (results[1].status === 'fulfilled') {
+        var pd = results[1].value;
+        projects = pd.projects || pd || [];
+      } else {
+        errors.push('Projects: ' + results[1].reason.message);
+      }
+
+      if (results[2].status === 'fulfilled') {
+        var dd = results[2].value;
+        devices = dd.devices || dd || [];
+      } else {
+        errors.push('Devices: ' + results[2].reason.message);
+      }
+
+      var tier = (subscription && subscription.tier) || 'free';
+      var isFree = tier === 'free';
+      var maxProjects = isFree ? 2 : -1;
+      var maxDevices = isFree ? 3 : -1;
+
+      var html = renderHeader();
+
+      // Errors
+      if (errors.length > 0) {
+        html += '<div class="alert alert-error">' + escapeHtml(errors.join(' | ')) + '</div>';
+      }
+
+      // Tier badge
+      html += '<div class="card">' +
+        '<div class="card-header">' +
+          '<h2>Account</h2>' +
+          (isFree
+            ? '<span class="badge badge-free">Free</span>'
+            : '<span class="badge badge-pro">Pro</span>') +
+        '</div>';
+
+      if (subscription && subscription.email) {
+        html += '<p style="font-size:14px;color:var(--text-secondary)">' + escapeHtml(subscription.email) + '</p>';
+      }
+
+      html += '</div>';
+
+      // Upgrade CTA
+      if (isFree) {
+        html += '<div class="cta-banner">' +
+          '<p>Unlock unlimited projects and devices with Hone Pro.</p>' +
+          '<a class="btn btn-primary btn-sm" href="#/upgrade">Upgrade to Pro</a>' +
+        '</div>';
+      }
+
+      // Usage
+      html += '<div class="card">' +
+        '<h3>Usage</h3>' +
+        renderUsageBar('Projects', Array.isArray(projects) ? projects.length : 0, maxProjects) +
+        renderUsageBar('Devices', Array.isArray(devices) ? devices.length : 0, maxDevices) +
+      '</div>';
+
+      // Projects
+      html += '<div class="card">' +
+        '<div class="card-header"><h2>Projects</h2></div>';
+
+      if (Array.isArray(projects) && projects.length > 0) {
+        projects.forEach(function(p) {
+          html += '<div class="list-item">' +
+            '<span class="list-item-name">' + escapeHtml(p.name || p.project_name || 'Unnamed') + '</span>' +
+            '<span class="list-item-meta">' + escapeHtml(p.room_id || p.roomId || '') + '</span>' +
+          '</div>';
+        });
+      } else {
+        html += '<div class="list-empty">No projects yet. Open a workspace in Hone IDE to create one.</div>';
+      }
+      html += '</div>';
+
+      // Devices
+      html += '<div class="card">' +
+        '<div class="card-header"><h2>Devices</h2></div>';
+
+      if (Array.isArray(devices) && devices.length > 0) {
+        devices.forEach(function(d) {
+          var icon = platformIcon(d.platform);
+          html += '<div class="list-item">' +
+            '<div class="device-row">' +
+              '<span class="platform-icon">' + icon + '</span>' +
+              '<span class="list-item-name">' + escapeHtml(d.name || d.device_name || 'Unknown') + '</span>' +
+            '</div>' +
+            '<span class="list-item-meta">' + escapeHtml(d.platform || '') + '</span>' +
+          '</div>';
+        });
+      } else {
+        html += '<div class="list-empty">No devices paired yet.</div>';
+      }
+      html += '</div>';
+
+      app.innerHTML = html;
+      bindHeaderEvents();
+    }
+
+    // ── Render: Upgrade ──
+    function renderUpgrade() {
+      app.innerHTML = '' +
+        renderHeader() +
+        '<a class="back-link" href="#/">\u2190 Back to dashboard</a>' +
+        '<div class="pricing-card">' +
+          '<div class="price">$36</div>' +
+          '<div class="price-period">per year ($3/month)</div>' +
+          '<ul class="features-list">' +
+            '<li>Unlimited synced projects</li>' +
+            '<li>Unlimited paired devices</li>' +
+            '<li>5 GB delta storage</li>' +
+            '<li>Priority support</li>' +
+          '</ul>' +
+          '<div id="upgrade-alert"></div>' +
+          '<button class="btn btn-primary" style="width:100%" id="subscribe-btn">Subscribe</button>' +
+        '</div>' +
+        '<div class="card" style="text-align:center">' +
+          '<p style="font-size:14px;color:var(--text-secondary);margin-bottom:16px">' +
+            'Stripe checkout is coming soon. Enter your email to be notified when Pro is available.' +
+          '</p>' +
+          '<div class="input-group">' +
+            '<input type="email" id="notify-email" placeholder="you@example.com">' +
+            '<button class="btn btn-secondary btn-sm" id="notify-btn">Notify me</button>' +
+          '</div>' +
+          '<div id="notify-alert"></div>' +
+        '</div>';
+
+      bindHeaderEvents();
+
+      document.getElementById('subscribe-btn').addEventListener('click', async function() {
+        var btn = this;
+        btn.disabled = true;
+        btn.textContent = 'Redirecting\u2026';
+        try {
+          var data = await apiCall('/auth/checkout?tier=pro');
+          if (data.url) {
+            location.href = data.url;
+          } else {
+            showAlert('upgrade-alert', 'Stripe checkout is not yet available. We\'ll notify you when it\'s live.', 'info');
+            btn.textContent = 'Coming soon';
+          }
+        } catch (err) {
+          showAlert('upgrade-alert', 'Checkout is not yet available. We\'ll notify you when it\'s live.', 'info');
+          btn.textContent = 'Coming soon';
+        }
+      });
+
+      document.getElementById('notify-btn').addEventListener('click', function() {
+        var email = document.getElementById('notify-email').value.trim();
+        if (!email) return;
+        showAlert('notify-alert', 'We\'ll let you know when Pro launches!', 'success');
+        this.disabled = true;
+        this.textContent = 'Subscribed';
+      });
+    }
+
+    // ── Render: Settings ──
+    function renderSettings() {
+      app.innerHTML = '' +
+        renderHeader() +
+        '<a class="back-link" href="#/">\u2190 Back to dashboard</a>' +
+        '<div class="card">' +
+          '<h2 style="margin-bottom:16px">Settings</h2>' +
+          '<h3>Email</h3>' +
+          '<div id="email-alert"></div>' +
+          '<div class="input-group">' +
+            '<input type="email" id="settings-email" placeholder="Link or change your email">' +
+            '<button class="btn btn-secondary btn-sm" id="link-email-btn">Update email</button>' +
+          '</div>' +
+        '</div>' +
+        '<div class="card">' +
+          '<h2 style="margin-bottom:8px;color:#F85149">Danger zone</h2>' +
+          '<p style="font-size:14px;color:var(--text-secondary);margin-bottom:16px">' +
+            'Permanently delete your Hone account and all associated data. This action cannot be undone.' +
+          '</p>' +
+          '<button class="btn btn-danger" id="delete-btn">Delete my account</button>' +
+        '</div>' +
+        '<div id="dialog-root"></div>';
+
+      bindHeaderEvents();
+
+      document.getElementById('link-email-btn').addEventListener('click', async function() {
+        var email = document.getElementById('settings-email').value.trim();
+        if (!email) {
+          showAlert('email-alert', 'Please enter an email address.', 'error');
+          return;
+        }
+        this.disabled = true;
+        this.textContent = 'Sending\u2026';
+        try {
+          await apiCall('/auth/login?email=' + encodeURIComponent(email) + '&callbackUrl=' + encodeURIComponent(location.origin + location.pathname + '#/'));
+          showAlert('email-alert', 'Verification link sent to ' + escapeHtml(email) + '.', 'success');
+          this.textContent = 'Sent';
+        } catch (err) {
+          showAlert('email-alert', err.message, 'error');
+          this.disabled = false;
+          this.textContent = 'Update email';
+        }
+      });
+
+      document.getElementById('delete-btn').addEventListener('click', function() {
+        var root = document.getElementById('dialog-root');
+        root.innerHTML = '' +
+          '<div class="overlay" id="delete-overlay">' +
+            '<div class="dialog">' +
+              '<h3>Delete account?</h3>' +
+              '<p>This will permanently delete your account, all projects, and all device pairings. This cannot be undone.</p>' +
+              '<div class="dialog-actions">' +
+                '<button class="btn btn-secondary btn-sm" id="cancel-delete">Cancel</button>' +
+                '<button class="btn btn-danger btn-sm" id="confirm-delete">Delete account</button>' +
+              '</div>' +
+            '</div>' +
+          '</div>';
+
+        document.getElementById('cancel-delete').addEventListener('click', function() {
+          root.innerHTML = '';
+        });
+
+        document.getElementById('delete-overlay').addEventListener('click', function(e) {
+          if (e.target === this) root.innerHTML = '';
+        });
+
+        document.getElementById('confirm-delete').addEventListener('click', async function() {
+          this.disabled = true;
+          this.textContent = 'Deleting\u2026';
+          try {
+            await apiCall('/auth/delete-account');
+            clearToken();
+            navigate('/login');
+          } catch (err) {
+            root.innerHTML = '';
+            showAlert('email-alert', 'Failed to delete account: ' + err.message, 'error');
+          }
+        });
+      });
+    }
+
+    // ── Shared components ──
+    function renderHeader() {
+      return '' +
+        '<header>' +
+          '<span class="logo" id="header-logo">Hone</span>' +
+          '<div style="display:flex;gap:8px;align-items:center">' +
+            '<a class="btn btn-ghost" href="#/settings">\u2699 Settings</a>' +
+            '<button class="btn btn-ghost" id="logout-btn">Log out</button>' +
+          '</div>' +
+        '</header>';
+    }
+
+    function bindHeaderEvents() {
+      var logo = document.getElementById('header-logo');
+      if (logo) logo.addEventListener('click', function() { navigate('/'); });
+
+      var logoutBtn = document.getElementById('logout-btn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', function() {
+          clearToken();
+          navigate('/login');
+        });
+      }
+    }
+
+    function renderUsageBar(label, used, max) {
+      var unlimited = max < 0;
+      var pct = unlimited ? Math.min((used / 10) * 100, 100) : (max === 0 ? 0 : Math.min((used / max) * 100, 100));
+      var warn = !unlimited && max > 0 && used >= max;
+      var displayMax = unlimited ? '\u221e' : max;
+
+      return '' +
+        '<div class="usage-row">' +
+          '<div class="usage-label">' +
+            '<span>' + escapeHtml(label) + '</span>' +
+            '<span>' + used + ' / ' + displayMax + '</span>' +
+          '</div>' +
+          '<div class="usage-bar">' +
+            '<div class="usage-bar-fill' + (warn ? ' warn' : '') + '" style="width:' + pct + '%"></div>' +
+          '</div>' +
+        '</div>';
+    }
+
+    function platformIcon(platform) {
+      if (!platform) return '\uD83D\uDCBB';
+      var p = platform.toLowerCase();
+      if (p === 'macos' || p === 'mac') return '\uD83D\uDDA5';
+      if (p === 'ios' || p === 'iphone' || p === 'ipad') return '\uD83D\uDCF1';
+      if (p === 'web' || p === 'dashboard') return '\uD83C\uDF10';
+      if (p === 'linux') return '\uD83D\uDC27';
+      if (p === 'windows') return '\uD83E\uDE9F';
+      if (p === 'android') return '\uD83E\uDD16';
+      return '\uD83D\uDCBB';
+    }
+
+    // ── Utilities ──
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function showAlert(containerId, message, type) {
+      var el = document.getElementById(containerId);
+      if (!el) return;
+      el.innerHTML = '<div class="alert alert-' + type + '">' + escapeHtml(message) + '</div>';
+    }
+
+    // ── Init ──
+    window.addEventListener('hashchange', render);
+    render();
+  </script>
+</body>
+</html>
